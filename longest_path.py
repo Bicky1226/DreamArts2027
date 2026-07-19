@@ -4,7 +4,7 @@ import sys
 import time
 from collections import deque
 
-TIME_LIMIT = None
+TIME_LIMIT = 10.0 
 EXACT_RATIO = 0.6
 
 # 入力をリストへ格納
@@ -163,9 +163,7 @@ def solve(edges, time_limit=TIME_LIMIT):
     dist = 0.0
     path = []
     if n:
-        exact_deadline = (float("inf") if time_limit is None
-                          else t0 + time_limit * EXACT_RATIO)
-        finished, d, p = exact_search(n, adj, exact_deadline)
+        finished, d, p = exact_search(n, adj, t0 + time_limit * EXACT_RATIO)
         if not finished:
             optimal = False
             d, p = local_search(n, adj, adj_w, t0 + time_limit, d, p)
@@ -179,7 +177,7 @@ def solve(edges, time_limit=TIME_LIMIT):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--time-limit", type=float, default=TIME_LIMIT,
-                    help="近似解へ切り替えるまでを含む制限時間(秒)")
+                    help="制限時間の目安(秒)")
     args = ap.parse_args()
     t0 = time.monotonic()
     edges = parse_input(sys.stdin.read())
